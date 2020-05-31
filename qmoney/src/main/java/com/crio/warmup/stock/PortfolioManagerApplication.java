@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -42,12 +43,11 @@ public class PortfolioManagerApplication {
 
     ObjectMapper mapper = getObjectMapper();
     PortfolioTrade[] trades = mapper.readValue(file, PortfolioTrade[].class);
-
+ 
     List<String> symbols = new ArrayList<>();
     for (int i = 0; i < trades.length; i++) {
       symbols.add(trades[i].getSymbol());
     }
-    System.out.println(symbols);
     return symbols;
   }
 
@@ -55,11 +55,6 @@ public class PortfolioManagerApplication {
     Logger logger = Logger.getLogger(PortfolioManagerApplication.class.getCanonicalName());
     ObjectMapper mapper = new ObjectMapper();
     logger.info(mapper.writeValueAsString(object));
-  }
-
-  private static Logger getLogger() {
-    Logger logger = Logger.getLogger(PortfolioManagerApplication.class.getCanonicalName());
-    return logger;
   }
 
   private static File resolveFileFromResources(String filename) throws URISyntaxException {
@@ -110,9 +105,9 @@ public class PortfolioManagerApplication {
   public static List<String> debugOutputs() {
 
     String valueOfArgument0 = "trades.json";
-    String xhv = "/home/crio-user/workspace/jayajn98-ME_QMONEY/qmoney/bin/main/trades.json";
-    String resultOfResolveFilePathArgs0 = xhv;
-    String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@3016fd5e";
+    String resultOfResolveFilePathArgs0 = 
+        "/home/crio-user/workspace/jayajn98-ME_QMONEY/qmoney/bin/main/trades.json";
+    String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@59f63e24";
     String functionNameFromTestFileInStackTrace = "mainReadFile";
     String lineNumberFromTestFileInStackTrace = "22";
 
