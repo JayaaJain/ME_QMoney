@@ -32,7 +32,7 @@ public class AnnualizedReturn {
       Comparator<AnnualizedReturn>() {
     @Override
      public int compare(AnnualizedReturn t1, AnnualizedReturn t2) {
-        return (int) (t1.getAnnualizedReturn().compareTo(t2.getAnnualizedReturn()));
+        return (int) (t2.getAnnualizedReturn().compareTo(t1.getAnnualizedReturn()));
       }
   };
 }
