@@ -167,6 +167,7 @@ public class PortfolioManagerApplication {
     File file = resolveFileFromResources(args[0]);
     ObjectMapper mapper = getObjectMapper();
     List<PortfolioTrade> trades = Arrays.asList(mapper.readValue(file, PortfolioTrade[].class));
+    
     List<TotalReturnsDto> sortedByValue = mainReadQuotesHelper(args, trades);
     Collections.sort(sortedByValue, TotalReturnsDto.closingComp);
     List<String> stocks = new ArrayList<String>();
