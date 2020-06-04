@@ -4,7 +4,6 @@ package com.crio.warmup.stock.portfolio;
 import org.springframework.web.client.RestTemplate;
 
 public class PortfolioManagerFactory {
-
   // TODO: CRIO_TASK_MODULE_REFACTOR
   // Implement the method in such a way that it will return new Instance of
   // PortfolioManager using RestTemplate provided.
@@ -13,6 +12,3 @@ public class PortfolioManagerFactory {
     return new PortfolioManagerImpl(restTemplate);
   }
 }
-
-  //PortfolioManagerFactory PortfolioFactory = new PortfolioManagerFactory();
-  //PortfolioManager[] result = restmp.getForObject(PortfolioFactory, PortfolioManager[].class);

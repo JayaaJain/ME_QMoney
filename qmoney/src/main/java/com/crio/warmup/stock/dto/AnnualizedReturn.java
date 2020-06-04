@@ -28,7 +28,7 @@ public class AnnualizedReturn {
   }
   
 
-  public static final Comparator<AnnualizedReturn> closingComp = new
+  public static final Comparator<AnnualizedReturn> closingComparator = new
       Comparator<AnnualizedReturn>() {
     @Override
      public int compare(AnnualizedReturn t1, AnnualizedReturn t2) {
