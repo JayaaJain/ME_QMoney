@@ -1,3 +1,4 @@
+
 package com.crio.warmup.stock.portfolio;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -10,6 +11,8 @@ import com.crio.warmup.stock.dto.TiingoCandle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import com.crio.warmup.stock.quotes.StockQuotesService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDate;
@@ -77,6 +80,17 @@ public class PortfolioManagerImpl implements PortfolioManager {
     return returns;
   }
 
+
+
+  // Caution: Do not delete or modify the constructor, or else your build will break!
+  // This is absolutely necessary for backward compatibility
+  
+
+
+
+
+
+
   private Comparator<AnnualizedReturn> getComparator() {
     return Comparator.comparing(AnnualizedReturn::getAnnualizedReturn).reversed();
   }
@@ -108,4 +122,13 @@ public class PortfolioManagerImpl implements PortfolioManager {
     uri = uri.concat(endDate + "&token=28f177ecf47f725538b65b1f587c7aea37b1bd34");
     return uri;
   }
+
+
+
+  // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
+  //  Modify the function #getStockQuote and start delegating to calls to
+  //  stockQuoteService provided via newly added constructor of the class.
+  //  You also have a liberty to completely get rid of that function itself, however, make sure
+  //  that you do not delete the #getStockQuote function.
+
 }
