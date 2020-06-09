@@ -1,16 +1,11 @@
-
 package com.crio.warmup.stock.quotes;
-
 import org.springframework.web.client.RestTemplate;
-
 public enum StockQuoteServiceFactory {
-
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   //  Its only read task - understand what we are doing before we use them.
   //  Pro's and Con's of implementing singleton via enum -
   //  https://softwareengineering.stackexchange.com/q/179386/253205
   INSTANCE;
-
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   //  Make sure that you have implemented TiingoService and AlphavantageService
   //  as per the instructions and the tests are passing for them.
@@ -21,17 +16,14 @@ public enum StockQuoteServiceFactory {
   //  the constructor of corresponding class.
   //  Run the tests using command below and make sure it passes
   //  ./gradlew test --tests StockQuoteServiceFactory
-
   public StockQuotesService getService(String provider,  RestTemplate restTemplate) {
-  //   if (provider == null ) {
-  //     return new AlphavantageService(restTemplate);
-  //   } else 
-    // if ("tiingo".equalsIgnoreCase(provider)) {
-    //   return new TiingoService(restTemplate);
-    // } else {
-    // return new AlphavantageService(restTemplate);
-    // }
-    //return null;
-    return new TiingoService(restTemplate);
+    if (provider == null) {
+      return null;
+    }
+    if ("tiingo".equalsIgnoreCase(provider)) {
+      return new TiingoService(restTemplate);
+    } else {
+      return new AlphavantageService(restTemplate);
+    }
   }
 }

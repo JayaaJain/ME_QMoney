@@ -37,25 +37,38 @@ public class TiingoService implements StockQuotesService {
   //  ./gradlew test --tests TiingoServiceTest and make sure it passes.
   @Override
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
-      throws NullPointerException, JsonProcessingException  {
+      throws JsonProcessingException, NullPointerException {
 
    
-    List<Candle> stockStartEnd;
     
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(new JavaTimeModule());
+    
+    
     try{
+      String url = buildUri(symbol, from, to);
+      String stocks = restTemplate.getForObject(url, String.class);
+      if (stocks == null) {
+        return null;
+      }
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.registerModule(new JavaTimeModule());
+      List<Candle> stockStartEnd;
+      TiingoCandle[] stockStartEndArray = mapper.readValue(stocks, TiingoCandle[].class); 
+      if (stockStartEndArray == null) {
+        stockStartEnd = Arrays.asList(new TiingoCandle[0]);
+      
+      
+      } else {
+          stockStartEnd = Arrays.asList(stockStartEndArray);
+      }
+    } catch(NullPointerException n) {
+      throw n;
+    }
+    return stockStartEnd;
+  }
+
     // if (from.compareTo(to) >= 0) {
     //   throw new RuntimeException();
-    
-
-    String url = buildUri(symbol, from, to);
-    String stocks = restTemplate.getForObject(url, String.class);
-    if (stocks == null){
-      return null;
-    } 
-
-    TiingoCandle[] stockStartEndArray = mapper.readValue(stocks, TiingoCandle[].class);
+      
 //     if (stocksStartToEndDate == null) {
 //       int stockLen = 0;
 //       return new ArrayList<TiingoCandle>();
@@ -65,20 +78,9 @@ public class TiingoService implements StockQuotesService {
 //       return stock;
 // }
 
-    if (stockStartEndArray == null) {
       
-      stockStartEnd = Arrays.asList(new TiingoCandle[0]);
-      
-      
-    } else {
-      stockStartEnd = Arrays.asList(stockStartEndArray);
-    }
-    // return stockStartEnd;
-  } catch(NullPointerException n) {
-    throw n;
-  }
-    return stockStartEnd;
-  }
+      // return stockStartEnd;
+    
 
   //CHECKSTYLE:OFF
 
