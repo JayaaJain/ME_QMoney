@@ -38,32 +38,20 @@ public class TiingoService implements StockQuotesService {
   @Override
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
       throws JsonProcessingException, NullPointerException {
-
-   
-    
-    
-    
-    try{
-      String url = buildUri(symbol, from, to);
-      String stocks = restTemplate.getForObject(url, String.class);
-      if (stocks == null) {
+    try {
+      String response = this.restTemplate.getForObject(buildUri(symbol, from, to), String.class);
+      if (response == null) {
         return null;
       }
-      ObjectMapper mapper = new ObjectMapper();
-      mapper.registerModule(new JavaTimeModule());
-      List<Candle> stockStartEnd;
-      TiingoCandle[] stockStartEndArray = mapper.readValue(stocks, TiingoCandle[].class); 
-      if (stockStartEndArray == null) {
-        stockStartEnd = Arrays.asList(new TiingoCandle[0]);
-      
-      
-      } else {
-          stockStartEnd = Arrays.asList(stockStartEndArray);
-      }
-    } catch(NullPointerException n) {
-      throw n;
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      List<TiingoCandle> tiingoCandle = objectMapper.readValue(response,
+           new TypeReference<List<TiingoCandle>>() {});
+      List<Candle> candle = new ArrayList<Candle>(tiingoCandle);
+      return candle;
+    } catch (NullPointerException e) {
+      throw e;
     }
-    return stockStartEnd;
   }
 
     // if (from.compareTo(to) >= 0) {
