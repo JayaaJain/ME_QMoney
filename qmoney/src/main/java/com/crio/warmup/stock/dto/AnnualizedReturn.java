@@ -35,4 +35,5 @@ public class AnnualizedReturn {
         return (int) (t2.getAnnualizedReturn().compareTo(t1.getAnnualizedReturn()));
       }
   };
+  
 }

@@ -7,7 +7,8 @@ import com.crio.warmup.stock.dto.TotalReturnsDto;
 import com.crio.warmup.stock.log.UncaughtExceptionHandler;
 import com.crio.warmup.stock.portfolio.PortfolioManager;
 import com.crio.warmup.stock.portfolio.PortfolioManagerFactory;
-
+import com.crio.warmup.stock.quotes.StockQuoteServiceFactory;
+import com.crio.warmup.stock.quotes.StockQuotesService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -87,13 +88,16 @@ public class PortfolioManagerApplication {
 
   public static List<AnnualizedReturn> mainCalculateReturnsAfterRefactor(String[] args)
       throws Exception {
+    
     LocalDate endDate = LocalDate.parse(args[1]);
     ObjectMapper objectMapper = getObjectMapper();
     RestTemplate restTemplate = new RestTemplate();
     PortfolioTrade[] portfolioTrades =
         (objectMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
     PortfolioManagerFactory portfolioManagerFactory = new PortfolioManagerFactory();
-    PortfolioManager portfolioManager = portfolioManagerFactory.getPortfolioManager(restTemplate);
+    //PortfolioManagerFactory stockquoteservicefactory = new PortfolioManagerFactory();
+    //StockQuoteServiceFactory stockquoteservicefactory = new StockQuoteServiceFactory();
+    PortfolioManager portfolioManager = portfolioManagerFactory.getPortfolioManager("tiingo", restTemplate);
     return portfolioManager.calculateAnnualizedReturn(Arrays.asList(portfolioTrades), endDate);
   }
 

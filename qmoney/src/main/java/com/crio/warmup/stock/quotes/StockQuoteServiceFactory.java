@@ -23,7 +23,15 @@ public enum StockQuoteServiceFactory {
   //  ./gradlew test --tests StockQuoteServiceFactory
 
   public StockQuotesService getService(String provider,  RestTemplate restTemplate) {
-
-     return null;
+  //   if (provider == null ) {
+  //     return new AlphavantageService(restTemplate);
+  //   } else 
+    // if ("tiingo".equalsIgnoreCase(provider)) {
+    //   return new TiingoService(restTemplate);
+    // } else {
+    // return new AlphavantageService(restTemplate);
+    // }
+    //return null;
+    return new TiingoService(restTemplate);
   }
 }

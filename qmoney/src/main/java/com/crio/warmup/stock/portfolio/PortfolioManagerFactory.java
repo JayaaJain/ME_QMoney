@@ -1,6 +1,12 @@
 
 package com.crio.warmup.stock.portfolio;
 
+import java.security.Provider;
+
+import com.crio.warmup.stock.quotes.StockQuoteServiceFactory;
+import com.crio.warmup.stock.quotes.StockQuotesService;
+import com.crio.warmup.stock.quotes.TiingoService;
+
 import org.springframework.web.client.RestTemplate;
 
 public class PortfolioManagerFactory {
@@ -8,18 +14,17 @@ public class PortfolioManagerFactory {
   // Implement the method in such a way that it will return new Instance of
   // PortfolioManager using RestTemplate provided.
 
-  public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
-    return new PortfolioManagerImpl(restTemplate);
-  }
-import com.crio.warmup.stock.quotes.StockQuoteServiceFactory;
-import com.crio.warmup.stock.quotes.StockQuotesService;
-import org.springframework.web.client.RestTemplate;
+  // public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
+  //   return new PortfolioManagerImpl(restTemplate);
+  // }
 
-public class PortfolioManagerFactory {
 
-  public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
 
-  }
+
+  // @Deprecated
+  // public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
+  //   return new PortfolioManagerImpl(restTemplate);
+  // }
 
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   //  Implement the method in such a way that it will return new Instance of PortfolioManager
@@ -31,10 +36,14 @@ public class PortfolioManagerFactory {
   //  Test your changes using gradle command and make sur all of the tests pass.
   //  ./gradlew test --tests PortfolioManagerFactory
 
-
-   public static PortfolioManager getPortfolioManager(String provider,
-     RestTemplate restTemplate) {
-     return null;
+  public static PortfolioManager getPortfolioManager(String provider, RestTemplate restTemplate) {
+    StockQuotesService stockQuotesService = StockQuoteServiceFactory.INSTANCE
+    .getService(provider, restTemplate); 
+  
+    return new PortfolioManagerImpl(stockQuotesService);
+    
    }
+
+
 
 }
