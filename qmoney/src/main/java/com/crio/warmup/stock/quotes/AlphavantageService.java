@@ -1,11 +1,14 @@
 package com.crio.warmup.stock.quotes;
+
 import com.crio.warmup.stock.dto.AlphavantageCandle;
 import com.crio.warmup.stock.dto.AlphavantageDailyResponse;
 import com.crio.warmup.stock.dto.Candle;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,11 +20,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.web.client.RestTemplate;
+
 public class AlphavantageService implements StockQuotesService {
+
   private RestTemplate restTemplate;
+
   protected AlphavantageService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
+
   @Override
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
       throws JsonProcessingException, NullPointerException {
@@ -43,20 +50,24 @@ public class AlphavantageService implements StockQuotesService {
           alphavantageCandle.add(temp);
         }
       }
+
       List<Candle> candle = new ArrayList<>(alphavantageCandle);
       return candle;
     } catch (NullPointerException e) {
       throw e;
     }
   }
+
   public Comparator<AlphavantageCandle> getComparator() {
     return Comparator.comparing(AlphavantageCandle::getDate);
   }
+
   protected String buildUri(String symbol) {
-    String uriTemplate = "https://alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED"
-            + "&symbol=" + symbol + "&output=full&apikey=V5ENFBXHATP6TDN2";
+    String uriTemplate = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED"
+            + "&symbol=" + symbol + "&output=full&apikey=BWOP3W5TZLVW7GEJ";
     return uriTemplate;      
   }
+
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   //  Inplement the StockQuoteService interface as per the contracts.
   //  The implementation of this functions will be doing following tasks

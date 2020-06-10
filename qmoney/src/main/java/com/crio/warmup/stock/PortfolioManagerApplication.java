@@ -86,20 +86,34 @@ public class PortfolioManagerApplication {
     return returns;
   }
 
-  public static List<AnnualizedReturn> mainCalculateReturnsAfterRefactor(String[] args)
+  public static List<AnnualizedReturn> mainCalculateReturnsAftRefactor(String[] args)
       throws Exception {
-    
     LocalDate endDate = LocalDate.parse(args[1]);
     ObjectMapper objectMapper = getObjectMapper();
+    PortfolioTrade[] portfolioTrades = objectMapper
+      .readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class);
     RestTemplate restTemplate = new RestTemplate();
-    PortfolioTrade[] portfolioTrades =
-        (objectMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
-    PortfolioManagerFactory portfolioManagerFactory = new PortfolioManagerFactory();
-    //PortfolioManagerFactory stockquoteservicefactory = new PortfolioManagerFactory();
-    //StockQuoteServiceFactory stockquoteservicefactory = new StockQuoteServiceFactory();
-    PortfolioManager portfolioManager = portfolioManagerFactory.getPortfolioManager("tiingo", restTemplate);
-    return portfolioManager.calculateAnnualizedReturn(Arrays.asList(portfolioTrades), endDate);
-  }
+    return PortfolioManagerFactory.getPortfolioManager(restTemplate)
+      .calculateAnnualizedReturn(Arrays.asList(portfolioTrades), endDate);
+  }  
+
+  // public static List<AnnualizedReturn> mainCalculateReturnsAfterRefactor(String[] args)
+  //     throws Exception {
+    
+  //   LocalDate endDate = LocalDate.parse(args[1]);
+  //   ObjectMapper objectMapper = getObjectMapper();
+  //   RestTemplate restTemplate = new RestTemplate();
+  //   PortfolioTrade[] portfolioTrades =
+  //       (objectMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
+  //   PortfolioManagerFactory portfolioManagerFactory = new PortfolioManagerFactory();
+  //   //PortfolioManagerFactory stockquoteservicefactory = new PortfolioManagerFactory();
+  //   //StockQuoteServiceFactory stockquoteservicefactory = new StockQuoteServiceFactory();
+
+  //   PortfolioManager portfolioManager = portfolioManagerFactory
+  //       .getPortfolioManager("tiingo", restTemplate);
+  //   return portfolioManager.calculateAnnualizedReturn(
+  //       Arrays.asList(portfolioTrades), endDate);
+  // }
 
   // TODO: CRIO_TASK_MODULE_CALCULATIONS
   //  annualized returns should be calculated in two steps -

@@ -1,15 +1,19 @@
 package com.crio.warmup.stock.portfolio;
+
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.SECONDS;
+
 import com.crio.warmup.stock.dto.AnnualizedReturn;
 import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.PortfolioTrade;
 import com.crio.warmup.stock.dto.TiingoCandle;
 import com.crio.warmup.stock.quotes.StockQuotesService;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -24,13 +28,16 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.springframework.web.client.RestTemplate;
+
 public class PortfolioManagerImpl implements PortfolioManager {
   private StockQuotesService stockQuotesService;
   // Caution: Do not delete or modify the constructor, or else your build will
   // break!
   // This is absolutely necessary for backward compatibility
+
   protected PortfolioManagerImpl(RestTemplate restTemplate) {
   }
+
   protected PortfolioManagerImpl(StockQuotesService stockQuotesService) {
     this.stockQuotesService = stockQuotesService;
   }
@@ -48,9 +55,11 @@ public class PortfolioManagerImpl implements PortfolioManager {
   // run ./gradlew build in order to test yout code, and make sure that
   // the tests and static code quality pass.
   //CHECKSTYLE:OFF
+  
   @Override
   public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades,
       LocalDate endDate) throws JsonProcessingException {
+
     List<AnnualizedReturn> returns = new ArrayList<AnnualizedReturn>();
     for(PortfolioTrade i : portfolioTrades) {
       String tic = i.getSymbol()        ;
@@ -90,10 +99,12 @@ public class PortfolioManagerImpl implements PortfolioManager {
   //         new TypeReference<ArrayList<Candle>>() {});
   //    return collection;   
   // }
+
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
       throws JsonProcessingException, JsonProcessingException {
     return stockQuotesService.getStockQuote(symbol, from, to);
   }
+
   protected String buildUri(String symbol, LocalDate startDate, LocalDate endDate) {
     String uri = "https://api.tiingo.com/tiingo/daily/";
     uri = uri.concat(symbol + "/prices?startDate=");

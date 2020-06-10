@@ -1,30 +1,21 @@
 
 package com.crio.warmup.stock.portfolio;
 
-import java.security.Provider;
-
 import com.crio.warmup.stock.quotes.StockQuoteServiceFactory;
 import com.crio.warmup.stock.quotes.StockQuotesService;
-import com.crio.warmup.stock.quotes.TiingoService;
 
 import org.springframework.web.client.RestTemplate;
 
 public class PortfolioManagerFactory {
+
   // TODO: CRIO_TASK_MODULE_REFACTOR
   // Implement the method in such a way that it will return new Instance of
   // PortfolioManager using RestTemplate provided.
 
-  // public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
-  //   return new PortfolioManagerImpl(restTemplate);
-  // }
-
-
-
-
-  // @Deprecated
-  // public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
-  //   return new PortfolioManagerImpl(restTemplate);
-  // }
+  @Deprecated
+  public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
+    return new PortfolioManagerImpl(restTemplate);
+  }
 
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   //  Implement the method in such a way that it will return new Instance of PortfolioManager
@@ -35,15 +26,11 @@ public class PortfolioManagerFactory {
   //  Mark the earlier constructor of PortfolioManager as @Deprecated.
   //  Test your changes using gradle command and make sur all of the tests pass.
   //  ./gradlew test --tests PortfolioManagerFactory
-
-  public static PortfolioManager getPortfolioManager(String provider, RestTemplate restTemplate) {
-    StockQuotesService stockQuotesService = StockQuoteServiceFactory.INSTANCE
-    .getService(provider, restTemplate); 
   
-    return new PortfolioManagerImpl(stockQuotesService);
-    
-   }
-
-
-
+  public static PortfolioManager getPortfolioManager(String provider,
+      RestTemplate restTemplate) {
+    StockQuotesService stockService = StockQuoteServiceFactory.INSTANCE
+        .getService(provider, restTemplate);     
+    return new PortfolioManagerImpl(stockService);
+  }
 }

@@ -1,5 +1,7 @@
 package com.crio.warmup.stock.quotes;
+
 import org.springframework.web.client.RestTemplate;
+
 public enum StockQuoteServiceFactory {
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   //  Its only read task - understand what we are doing before we use them.

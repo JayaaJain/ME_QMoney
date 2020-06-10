@@ -1,58 +1,72 @@
 package com.crio.warmup.stock.dto;
 
-import java.sql.Date;
-import java.time.LocalDate;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
-//  Implement the Candle interface in such a way that it matches the
-//  parameters returned inside Json response from AlphavantageService.
+import java.time.LocalDate;
+import java.util.Date;
 
-  //Reference - https:www.baeldung.com/jackson-ignore-properties-on-serialization
-  //Reference - https:www.baeldung.com/jackson-name-of-property
+//TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
+//Implement the Candle interface in such a way that it matches the
+//parameters returned inside Json response from AlphavantageService.
+//Reference - https:www.baeldung.com/jackson-ignore-properties-on-serialization
+//Reference - https:www.baeldung.com/jackson-name-of-property
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AlphavantageCandle implements Candle {
 
+public class AlphavantageCandle implements Candle {
 
   @JsonProperty("1. open")
   private Double open;
-  @JsonProperty("2. close")
+  @JsonProperty("4. close")
   private Double close;
-  @JsonProperty("3. high")
+  @JsonProperty("2. high")
   private Double high;
-  @JsonProperty("4. low")
+  @JsonProperty("3. low")
   private Double low;
   
+  @JsonIgnore
   private LocalDate date;
+  
+  public Double getOpen() {
+    return open;
+  }
 
-@Override
-public Double getOpen() {
-	return open;
-}
+  public void setOpen(Double open) {
+    this.open = open;
+  }
 
-  @Override
   public Double getClose() {
     return close;
   }
 
-  @Override
+  public void setClose(Double close) {
+    this.close = close;
+  }
+
   public Double getHigh() {
     return high;
   }
 
-  @Override
+  public void setHigh(Double high) {
+    this.high = high;
+  }
+
   public Double getLow() {
     return low;
   }
 
-  @Override
+  public void setLow(Double low) {
+    this.low = low;
+  }
+
   public LocalDate getDate() {
     return date;
-}
-public void setDate(LocalDate date) {
-  this.date = date;
-}
+  }
+  
+  public void setDate(LocalDate date) {
+    this.date = date;
+  }
 }
 
