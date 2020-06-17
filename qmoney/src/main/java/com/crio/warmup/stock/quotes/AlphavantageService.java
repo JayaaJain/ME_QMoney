@@ -1,14 +1,17 @@
 package com.crio.warmup.stock.quotes;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 import com.crio.warmup.stock.dto.AlphavantageCandle;
+
 import com.crio.warmup.stock.dto.AlphavantageDailyResponse;
 import com.crio.warmup.stock.dto.Candle;
-
+import com.crio.warmup.stock.exception.StockQuoteServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,20 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-package com.crio.warmup.stock.quotes;
-
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.SECONDS;
-
-import com.crio.warmup.stock.dto.AlphavantageDailyResponse;
-import com.crio.warmup.stock.dto.Candle;
-import com.crio.warmup.stock.exception.StockQuoteServiceException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,14 +35,30 @@ public class AlphavantageService implements StockQuotesService {
 
   @Override
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
-      throws JsonProcessingException, NullPointerException {
-    try {
-      String response = this.restTemplate.getForObject(buildUri(symbol), String.class);
-      if (response == null) {
-        return null;
+      throws StockQuoteServiceException {
+    if (from.compareTo(to) > 0) {
+      throw new RuntimeException("Start Date is greater than end date");
+    }
+    String limit = "{\n    \"Note\": \"Thank you for using Alpha Vantage! Our standard API "
+        + "call frequency is 5 calls per minute and 500 calls per day. Please visit "
+        + "https://www.alphavantage.co/premium/ if you would like to target a higher "
+        + "API call frequency.\"\n}";
+    String response = this.restTemplate.getForObject(buildUri(symbol), String.class);
+    if (response != null) {
+      if (response.equals(limit)) {
+        throw new StockQuoteServiceException("Limit Exceeded for calls per minute");
       }
-      ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.registerModule(new JavaTimeModule());    
+    } else {
+      throw new StockQuoteServiceException("Response is Null");
+    }
+    // try {
+    //   String response = this.restTemplate.getForObject(buildUri(symbol), String.class);
+    //   if (response == null) {
+    //     return null;
+    //   }
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    try {  
       AlphavantageDailyResponse alphavantageDailyResponse = objectMapper.readValue(response,
           new TypeReference<AlphavantageDailyResponse>(){});
       Map<LocalDate, AlphavantageCandle> map = alphavantageDailyResponse.getCandles();
@@ -68,8 +73,8 @@ public class AlphavantageService implements StockQuotesService {
 
       List<Candle> candle = new ArrayList<>(alphavantageCandle);
       return candle;
-    } catch (NullPointerException e) {
-      throw e;
+    } catch (Exception e) {
+      throw new StockQuoteServiceException("Error", e);
     }
   }
 
@@ -114,5 +119,5 @@ public class AlphavantageService implements StockQuotesService {
   //      external user's of our API are able to explicitly handle this exception upfront.
   //CHECKSTYLE:OFF
 
-}
+
 

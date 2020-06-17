@@ -1,4 +1,3 @@
-
 package com.crio.warmup.stock.portfolio;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -8,16 +7,11 @@ import com.crio.warmup.stock.dto.AnnualizedReturn;
 import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.PortfolioTrade;
 import com.crio.warmup.stock.dto.TiingoCandle;
-import com.crio.warmup.stock.quotes.StockQuotesService;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import com.crio.warmup.stock.exception.StockQuoteServiceException;
 import com.crio.warmup.stock.quotes.StockQuotesService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDate;
@@ -37,10 +31,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class PortfolioManagerImpl implements PortfolioManager {
   private StockQuotesService stockQuotesService;
-  // Caution: Do not delete or modify the constructor, or else your build will
-  // break!
-  // This is absolutely necessary for backward compatibility
-
+  
   protected PortfolioManagerImpl(RestTemplate restTemplate) {
   }
 
@@ -62,9 +53,9 @@ public class PortfolioManagerImpl implements PortfolioManager {
   // the tests and static code quality pass.
   //CHECKSTYLE:OFF
   
-  @Override
+  
   public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades,
-      LocalDate endDate) throws JsonProcessingException {
+      LocalDate endDate) throws StockQuoteServiceException {
 
     List<AnnualizedReturn> returns = new ArrayList<AnnualizedReturn>();
     for(PortfolioTrade i : portfolioTrades) {
@@ -107,7 +98,7 @@ public class PortfolioManagerImpl implements PortfolioManager {
   // }
 
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
-      throws JsonProcessingException, JsonProcessingException {
+      throws StockQuoteServiceException  {
     return stockQuotesService.getStockQuote(symbol, from, to);
   }
 
@@ -129,9 +120,7 @@ public class PortfolioManagerImpl implements PortfolioManager {
 
   // Caution: Do not delete or modify the constructor, or else your build will break!
   // This is absolutely necessary for backward compatibility
-  protected PortfolioManagerImpl(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-  }
+ 
 
 
 

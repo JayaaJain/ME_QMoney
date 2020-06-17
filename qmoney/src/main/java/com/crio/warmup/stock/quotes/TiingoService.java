@@ -1,9 +1,8 @@
-
 package com.crio.warmup.stock.quotes;
 
 import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.TiingoCandle;
-
+import com.crio.warmup.stock.exception.StockQuoteServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import com.crio.warmup.stock.exception.StockQuoteServiceException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,11 +26,14 @@ public class TiingoService implements StockQuotesService {
 
   @Override
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
-      throws JsonProcessingException, NullPointerException {
+      throws StockQuoteServiceException {
     try { 
       String response = this.restTemplate.getForObject(buildUri(symbol, from, to), String.class);
+      String invalidTic = "{\"detail\":\"Error: Ticker '" + symbol + "' not found\"}";
       if (response == null) {
-        return null;
+        throw new StockQuoteServiceException("Response is Null");
+      } else if (invalidTic.equals(response)) {
+        throw new StockQuoteServiceException("Ticker" + symbol + "does not exist");
       }
       ObjectMapper objectMapper = new ObjectMapper();
       objectMapper.registerModule(new JavaTimeModule());
@@ -45,8 +41,8 @@ public class TiingoService implements StockQuotesService {
            new TypeReference<List<TiingoCandle>>() {});
       List<Candle> candle = new ArrayList<Candle>(tiingoCandle);
       return candle;         
-    } catch (NullPointerException e) {
-      throw e;
+    } catch (Exception e) {
+      throw new StockQuoteServiceException("Error", e);
     }
   }
 
