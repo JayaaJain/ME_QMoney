@@ -1,4 +1,3 @@
-package com.crio.warmup.stock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

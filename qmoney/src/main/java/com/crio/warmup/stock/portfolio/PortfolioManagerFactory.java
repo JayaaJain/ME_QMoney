@@ -33,4 +33,12 @@ public class PortfolioManagerFactory {
         .getService(provider, restTemplate);     
     return new PortfolioManagerImpl(stockService);
   }
+
+  public static PortfolioManager getPortfolioManager(RestTemplate restTemplate) {
+
+  }
+
+
+
+
 }
